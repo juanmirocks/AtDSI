@@ -38,7 +38,7 @@ def prod_first_k(x: list[SupportsRichComparison], k: int) -> SupportsRichCompari
 # Would be useful for generic solution with negative numbers and any k
 def how_many_last_k_nums_are_negative(x: list[SupportsRichComparison], k: int) -> int:
     ret = 0
-    for i in range(len(x)-1, max(-1, len(x)-1-k), -1):
+    for i in range(len(x) - 1, max(-1, len(x) - 1 - k), -1):
         if x[i] < 0:
             ret += 1
         else:
@@ -46,11 +46,15 @@ def how_many_last_k_nums_are_negative(x: list[SupportsRichComparison], k: int) -
     return ret
 
 
-def try_max_multiplying_head_with_last_2_negative_numbers(x: list[SupportsRichComparison], k: int) -> SupportsRichComparison:
+def try_max_multiplying_head_with_last_2_negative_numbers(
+    x: list[SupportsRichComparison], k: int
+) -> SupportsRichComparison:
     if k != 3:
-        raise NotImplementedError("k must be 3 to allow for negative numbers (as per exact book's question/problem definition). A generic solution is not implemented yet")
+        raise NotImplementedError(
+            "k must be 3 to allow for negative numbers (as per exact book's question/problem definition). A generic solution is not implemented yet"
+        )
     else:
-        return max(prod_first_k(x, k), x[0] * math.prod(x[len(x)-2:]))
+        return max(prod_first_k(x, k), x[0] * math.prod(x[len(x) - 2 :]))
 
 
 # -----------------------------------------------------------------------------
@@ -64,7 +68,9 @@ def get_max_product_1(x: Iterable[SupportsRichComparison], k: int) -> list[Suppo
     """
     x_sorted = sorted(x, reverse=True)
 
-    if len(x_sorted) == 0 or k == 0: # check the length of x_sorted as input Iterable might not have an efficient `len` implementation
+    if (
+        len(x_sorted) == 0 or k == 0
+    ):  # check the length of x_sorted as input Iterable might not have an efficient `len` implementation
         return _PROD_START
     elif x_sorted[-1] >= 0 or k == 1:
         return prod_first_k(x_sorted, k)
@@ -122,7 +128,7 @@ TEST_CASES = [
     (([3, 2, 5], 2), 15),
     (([1, 3, 4, 5], 3), 60),
     # Negative numbers
-    (([-2, -4, 5, 3], 3), 40), # as per question/problem definition
+    (([-2, -4, 5, 3], 3), 40),  # as per question/problem definition
     (([-2, -4, -5, 3], 3), 60),
     (([-1, 2, 2, 2], 3), 8),
     (([-1, -8, 2, 2, 2], 3), 16),
@@ -133,12 +139,7 @@ TEST_CASES = [
 
 
 def test():
-    run_test_cases(
-        TEST_CASES,
-        get_max_product_1,
-        get_max_product_2_mut,
-        get_max_product_3
-    )
+    run_test_cases(TEST_CASES, get_max_product_1, get_max_product_2_mut, get_max_product_3)
 
 
 def test_how_many_last_nums_are_negative():
@@ -153,9 +154,7 @@ def test_how_many_last_nums_are_negative():
         (([8, -9], 2), 1),
         (([-8, -9], 2), 2),
         (([-8, -9], 1), 1),
-        (([3, -8, -9], 3), 2)
+        (([3, -8, -9], 3), 2),
     ]
 
-    run_test_cases(
-        TEST_CASES,
-        how_many_last_k_nums_are_negative)
+    run_test_cases(TEST_CASES, how_many_last_k_nums_are_negative)

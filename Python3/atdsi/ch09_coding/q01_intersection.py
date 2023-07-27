@@ -38,13 +38,9 @@ TEST_CASES = [
     (([1], []), []),
     (([], [1]), []),
     (([1], [1]), [1]),
-    (([1, 2, 3, 4, 5], [0, 1, 3, 7]), [1, 3])
+    (([1, 2, 3, 4, 5], [0, 1, 3, 7]), [1, 3]),
 ]
 
 
 def test():
-    run_test_cases(
-        TEST_CASES,
-        get_intersection_1,
-        get_intersection_2
-    )
+    run_test_cases(TEST_CASES, get_intersection_1, get_intersection_2)
