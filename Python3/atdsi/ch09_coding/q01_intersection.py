@@ -8,7 +8,7 @@ def get_intersection_1(a: Sequence[Any], b: Sequence[Any]) -> list[Any]:
     * Space: O(min(a_len, b_len))
     """
     if len(b) < len(a):
-        # Swap to always create an additional set only over the smallest input sequence
+        # Swap to create an additional set over the smallest input sequence only
         a, b = b, a
     return list(set(a).intersection(b))
 
