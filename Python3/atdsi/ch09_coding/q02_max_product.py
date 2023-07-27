@@ -1,7 +1,9 @@
 from __future__ import annotations
+import heapq
 
 from typing import TYPE_CHECKING, Iterable
 import math
+from atdsi import require
 
 # See: https://mypy.readthedocs.io/en/stable/runtime_troubles.html#using-types-defined-in-stubs-but-not-at-runtime
 if TYPE_CHECKING:
@@ -88,7 +90,22 @@ def get_max_product_2_mut(x: list[SupportsRichComparison], k: int) -> list[Suppo
         return try_max_multiplying_head_with_last_2_negative_numbers(x, k)
 
 
+def get_max_product_3(x: list[SupportsRichComparison], k: int) -> list[SupportsRichComparison]:
+    """
+    Alternative: when k is known and small (3, as per question/problem exact definition) we can use a min/max-heap to more efficiently get the max & min elements.
 
+    Complexity:
+    * NOTE: we treat k (=3) as a constant
+
+    * Time: O(n * log(k)) -> O(n) -- see: https://stackoverflow.com/a/23038826/341320
+    * Space: O(k)  -> O(1)
+    """
+    if k == 3:
+        largest_3 = heapq.nlargest(3, x)
+        smallest_2 = heapq.nsmallest(2, x)
+        return max(math.prod(largest_3), largest_3[0] * math.prod(smallest_2))
+    else:
+        return get_max_product_1(x, k)
 
 
 # -----------------------------------------------------------------------------
@@ -110,7 +127,7 @@ TEST_CASES = [
     (([-1, 2, 2, 2], 3), 8),
     (([-1, -8, 2, 2, 2], 3), 16),
     (([-1, -8, -2, 2, 2], 3), 32),
-    # Negative numbers, k != 3 (not requested in question/problem), not implemented
+    # Negative numbers, when k != 3 (not requested in question/problem), not implemented
     # (([-1, -8, -2, -2, 2], 4), 32)
 ]
 
@@ -118,8 +135,9 @@ TEST_CASES = [
 def test():
     run_test_cases(
         TEST_CASES,
-        get_max_product_1
-        # get_max_product_2_mut
+        get_max_product_1,
+        get_max_product_2_mut,
+        get_max_product_3
     )
 
 
