@@ -15,7 +15,7 @@ def get_intersection_1(a: Sequence[Any], b: Sequence[Any]) -> list[Any]:
 
 # -----------------------------------------------------------------------------
 
-from atdsi.__util__ import run_test_cases
+from atdsi.tutil import run_test_cases
 
 
 TEST_CASES = [
