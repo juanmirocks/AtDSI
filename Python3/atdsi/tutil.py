@@ -4,7 +4,7 @@ from typing import Callable, TypeVar, Sequence
 Output = TypeVar("Output")
 
 
-# To use withing pytest test_ functions
+# To use within pytest `test*` functions
 def run_test_cases(test_cases: Sequence[tuple[tuple, Output]], *funs: Callable[..., Output], **kwargs) -> None:
     equal = kwargs.get("equal", lambda x, y: x == y)
 
