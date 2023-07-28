@@ -74,7 +74,7 @@ lint_types_strict.shell = "mypy --strict || true"
 
 lint_bandit = "bandit -c pyproject.toml -r ."
 # snyk is not installed as a python dependency, but as a shell command (see how to install Snyk CLI: https://docs.snyk.io/snyk-cli/install-the-snyk-cli)
-lint_snyk.shell = "snyk code test; snyk test ."
+lint_snyk.shell = "snyk code test; snyk test --all-projects"
 lint_sec = ["lint_bandit", "lint_snyk"]
 
 lint_all = ["lint_package", "lint_errors", "lint_types", "lint_sec"]
