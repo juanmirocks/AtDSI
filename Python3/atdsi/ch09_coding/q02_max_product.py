@@ -99,6 +99,7 @@ def get_max_product_2_mut(x: list[SupportsRichComparison], k: int) -> list[Suppo
 def get_max_product_3(x: list[SupportsRichComparison], k: int) -> list[SupportsRichComparison]:
     """
     Alternative: when k is known and small (3, as per question/problem exact definition) we can use a min/max-heap to more efficiently get the max & min elements.
+    See: https://docs.python.org/3.10/library/heapq.html?highlight=heapq#heapq.nsmallest
 
     Complexity:
     * NOTE: we treat k (=3) as a constant
