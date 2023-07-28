@@ -127,9 +127,9 @@ def get_max_product_3(x: list[SupportsRichComparison], k: int) -> list[SupportsR
 from atdsi.tutil import run_test_cases
 
 TEST_CASES = [
-    (([], 0), 1),
-    (([3], 0), 1),
-    (([0], 0), 1),
+    (([], 0), _PROD_START),
+    (([3], 0), _PROD_START),
+    (([0], 0), _PROD_START),
     (([0], 1), 0),
     (([3], 1), 3),
     (([3, 2], 2), 6),
