@@ -77,7 +77,8 @@ lint_bandit = "bandit -c pyproject.toml -r ."
 lint_snyk.shell = "snyk code test; snyk test"
 lint_sec = ["lint_bandit", "lint_snyk"]
 
+lint_all = ["lint_package", "lint_errors", "lint_types", "lint_sec"]
 # Snyk not added here since it might not be installed in the system
-lint_all = ["lint_package", "lint_errors", "lint_types", "lint_bandit"]
+lint_all_wo_snyk = ["lint_package", "lint_errors", "lint_types", "lint_bandit"]
 
 test_n_lint = ["test", "lint_all"]
