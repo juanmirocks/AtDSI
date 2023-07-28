@@ -1,5 +1,9 @@
 name: CI
 
+defaults:
+  run:
+    working-directory: Python3
+
 on: [push]
 
 permissions:
