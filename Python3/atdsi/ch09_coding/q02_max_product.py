@@ -114,6 +114,14 @@ def _get_max_product_4__find_max_mult(
     smallest_tail_with_maybe_negatives: Sequence[SupportsRichComparison],
     k: NonNegativeInt,
 ) -> SupportsRichComparison:
+    """
+    Get maximum product of k elements, given desc-sorted seqs: largest (first elements of original seq) & smallest (last elements of original seq).
+
+    Both sub-seqs could include negative numbers. In particular, `smallest_tail_with_maybe_negatives` will contain an equal or greater number of negative numbers.
+
+    The algorithm tries to multiply those tail negative numbers in pairs (so we obtain a positive number) with subsequences of head (none might taken too)
+    to come up with the maximum product.
+    """
     ret = prod_first_k(largest_head, k)
 
     if is_last_non_negative(smallest_tail_with_maybe_negatives):
