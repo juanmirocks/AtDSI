@@ -3,7 +3,6 @@ import heapq
 
 from typing import TYPE_CHECKING, Iterable, NewType, Sequence
 import math
-from atdsi import require
 
 # See: https://mypy.readthedocs.io/en/stable/runtime_troubles.html#using-types-defined-in-stubs-but-not-at-runtime
 if TYPE_CHECKING:
@@ -84,6 +83,24 @@ def get_equal_or_one_less_even_number(k: NonNegativeInt) -> int:
         return k - 1
 
 
+def leave_even_size_of_negative_numbers_only_mut(
+    x_sorted_desc: Sequence[SupportsRichComparison],
+) -> Sequence[SupportsRichComparison]:
+    if is_last_non_negative(x_sorted_desc):
+        # Optimization to quickly check if there are no negative numbers
+        return []
+    else:
+        while len(x_sorted_desc) > 0:
+            if x_sorted_desc[0] >= 0:
+                del x_sorted_desc[0]
+            else:
+                if len(x_sorted_desc) % 2 == 0:
+                    return x_sorted_desc
+                else:
+                    del x_sorted_desc[0]
+                    return x_sorted_desc
+
+
 # -----------------------------------------------------------------------------
 
 
@@ -159,20 +176,34 @@ def get_max_product_4(x: Iterable[SupportsRichComparison], k: NonNegativeInt) ->
                 x if isinstance(x, Sequence) else list(x)
             )  # make sure we have an indexable sequence to work on it efficiently -- Space O(1) if input is already a sequence, else O(n)
 
-            if k * 2 > len(x_seq):
-                x_sorted = sorted(x)  # Space O(n)
+            # Arbitrary decision boundary to decide using `sorted` or heapq sorting
+            is_k_big = k * 2 > len(x_seq)
+
+            if is_k_big:
+                x_sorted = sorted(x, reverse=True)  # Space O(n)
                 largest_head = x_sorted
-                smallest_tail = x_sorted
+                # Space O(k) -- It could be optimized to use `x_sorted` dropping unneeded elements in place
+                smallest_tail = x_sorted[-k:]  # Space O(k)
+
             else:
+                # Space O(k) -- worst case: Space(n/2)
                 largest_head = heapq.nlargest(k, x_seq)
+                # Space O(k) -- worst case: Space(n/2)
                 smallest_tail = heapq.nsmallest(get_equal_or_one_less_even_number(k), x_seq)
+
+            smallest_tail_abs = list(map(abs, leave_even_size_of_negative_numbers_only_mut(smallest_tail)))
+
+            return max(
+                prod_first_k(largest_head, k),
+                math.prod(smallest_tail_abs) * prod_first_k(largest_head, k - len(smallest_tail_abs)),
+            )
 
 
 # -----------------------------------------------------------------------------
 
 from atdsi.tutil import run_test_cases
 
-TEST_CASES = [
+TEST_CASES_NON_GENERIC = [
     (([], 0), _PROD_START),
     (([3], 0), _PROD_START),
     (([0], 0), _PROD_START),
@@ -181,19 +212,31 @@ TEST_CASES = [
     (([3, 2], 2), 6),
     (([3, 2, 5], 2), 15),
     (([1, 3, 4, 5], 3), 60),
-    # Negative numbers
+    # Negative numbers with fixed k==3
     (([-2, -4, 5, 3], 3), 40),  # as per question/problem definition
     (([-2, -4, -5, 3], 3), 60),
     (([-1, 2, 2, 2], 3), 8),
     (([-1, -8, 2, 2, 2], 3), 16),
     (([-1, -8, -2, 2, 2], 3), 32),
-    # Negative numbers, when k != 3 (not requested in question/problem), not implemented
-    # (([-1, -8, -2, -2, 2], 4), 32)
 ]
 
 
-def test():
-    run_test_cases(TEST_CASES, get_max_product_1, get_max_product_2_mut, get_max_product_3)
+def test_negative_numbers_only_for_fixed_k_3():
+    run_test_cases(TEST_CASES_NON_GENERIC, get_max_product_1, get_max_product_2_mut, get_max_product_3)
+
+
+TEST_CASES_NEGATIVE_GENERIC = [
+    # Negative numbers, generic (when k != 3, not requested in question/problem)
+    (([-1, -8, -2, -2, 2], 4), 32)  # -8 * -2 * -2 * -1
+]
+
+
+def test_generic():
+    run_test_cases(TEST_CASES_NEGATIVE_GENERIC, get_max_product_4)
+    run_test_cases(TEST_CASES_NON_GENERIC, get_max_product_4)
+
+
+# -----------------------------------------------------------------------------
 
 
 def test_how_many_last_nums_are_negative():
