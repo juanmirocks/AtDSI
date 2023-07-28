@@ -69,7 +69,7 @@ def get_max_product_1(x: Iterable[SupportsRichComparison], k: int) -> list[Suppo
     x_sorted = sorted(x, reverse=True)
 
     if (
-        len(x_sorted) == 0 or k == 0
+        k == 0 or len(x_sorted) == 0
     ):  # check the length of x_sorted as input Iterable might not have an efficient `len` implementation
         return _PROD_START
     elif x_sorted[-1] >= 0 or k == 1:
@@ -86,7 +86,7 @@ def get_max_product_2_mut(x: list[SupportsRichComparison], k: int) -> list[Suppo
     * Time: O(n * log(n))
     * Space: O(1)
     """
-    if len(x) == 0 or k == 0:
+    if k == 0 or len(x) == 0:
         return _PROD_START
 
     x.sort(reverse=True)
