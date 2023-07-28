@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 # -----------------------------------------------------------------------------
 
-# Helper functions & constants
+# Utility functions & constants
 
 
 NonNegativeInt = NewType("NonNegativeInt", int)
@@ -62,7 +62,23 @@ def how_many_last_k_nums_are_negative(x: Sequence[SupportsRichComparison], k: No
     return ret
 
 
-def try_max_multiplying_head_with_last_2_negative_numbers(
+def get_even_number_same_or_one_less(k: NonNegativeInt) -> int:
+    """
+    Return k if k is even, else k-1
+    """
+    if k % 2 == 0:
+        return k
+    else:
+        return k - 1
+
+
+# -----------------------------------------------------------------------------
+
+
+# Specific-helper functions
+
+
+def _try_max_multiplying_head_with_last_2_negative_numbers(
     x: list[SupportsRichComparison], k: NonNegativeInt
 ) -> SupportsRichComparison:
     if k != 3:
@@ -73,17 +89,7 @@ def try_max_multiplying_head_with_last_2_negative_numbers(
         return max(prod_first_k(x, k), x[0] * math.prod(x[len(x) - 2 :]))
 
 
-def get_equal_or_one_less_even_number(k: NonNegativeInt) -> int:
-    """
-    Return k if k is even, else k-1
-    """
-    if k % 2 == 0:
-        return k
-    else:
-        return k - 1
-
-
-def leave_even_size_of_negative_numbers_only_mut(
+def _leave_even_size_of_negative_numbers_only_mut(
     x_sorted_desc: Sequence[SupportsRichComparison],
 ) -> Sequence[SupportsRichComparison]:
     if is_last_non_negative(x_sorted_desc):
@@ -119,7 +125,7 @@ def get_max_product_1(x: Iterable[SupportsRichComparison], k: NonNegativeInt) ->
     elif k == 1 or is_last_non_negative(x_sorted):
         return prod_first_k(x_sorted, k)
     else:
-        return try_max_multiplying_head_with_last_2_negative_numbers(x_sorted, k)
+        return _try_max_multiplying_head_with_last_2_negative_numbers(x_sorted, k)
 
 
 def get_max_product_2_mut(x: list[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
@@ -137,7 +143,7 @@ def get_max_product_2_mut(x: list[SupportsRichComparison], k: NonNegativeInt) ->
     if k == 1 or is_last_non_negative(x):
         return prod_first_k(x, k)
     else:
-        return try_max_multiplying_head_with_last_2_negative_numbers(x, k)
+        return _try_max_multiplying_head_with_last_2_negative_numbers(x, k)
 
 
 def get_max_product_3(x: Sequence[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
@@ -189,9 +195,9 @@ def get_max_product_4(x: Iterable[SupportsRichComparison], k: NonNegativeInt) ->
                 # Space O(k) -- worst case: Space(n/2)
                 largest_head = heapq.nlargest(k, x_seq)
                 # Space O(k) -- worst case: Space(n/2)
-                smallest_tail = heapq.nsmallest(get_equal_or_one_less_even_number(k), x_seq)
+                smallest_tail = heapq.nsmallest(get_even_number_same_or_one_less(k), x_seq)
 
-            smallest_tail_abs = list(map(abs, leave_even_size_of_negative_numbers_only_mut(smallest_tail)))
+            smallest_tail_abs = list(map(abs, _leave_even_size_of_negative_numbers_only_mut(smallest_tail)))
 
             return max(
                 prod_first_k(largest_head, k),
