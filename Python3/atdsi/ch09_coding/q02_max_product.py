@@ -236,15 +236,15 @@ def get_max_product_4(x: Iterable[SupportsRichComparison], k: NonNegativeInt) ->
             is_k_big = k * 2 > len(x_seq)
 
             if is_k_big:
-                x_sorted = sorted(x, reverse=True)  # Space O(n)
+                x_sorted = sorted(x, reverse=True)  # Time O(n * log(n)) -- Space O(n)
                 largest_head = x_sorted
                 # Space O(k) - It could be optimized to use `x_sorted` dropping unneeded elements in place
                 smallest_tail = x_sorted[-k:]
 
             else:
-                # Space O(k) -- worst case: Space(n/2)
+                # Time O(k * log(k)) -- Space O(k) -- worst case: k ~= n/2
                 largest_head = heapq.nlargest(k, x_seq)
-                # Space O(k) -- worst case: Space(n/2)
+                # Time O(k * log(k)) -- Space O(k) -- worst case: k ~= n/2
                 smallest_tail = heapq.nsmallest(get_even_number_same_or_one_less(k), x_seq)
 
             return _get_max_product_4__find_max_mult(largest_head, smallest_tail, k)
