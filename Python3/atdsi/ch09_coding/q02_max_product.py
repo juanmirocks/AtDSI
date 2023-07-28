@@ -102,10 +102,10 @@ def get_max_product_3(x: list[SupportsRichComparison], k: int) -> list[SupportsR
     See: https://docs.python.org/3.10/library/heapq.html?highlight=heapq#heapq.nsmallest
 
     Complexity:
-    * NOTE: we treat k (=3) as a constant
+    * NOTE: following simplifications apply when treating k as a constant (=3).
 
     * Time: O(n * log(k)) -> O(n) -- see: https://stackoverflow.com/a/23038826/341320
-    * Space: O(k)  -> O(1)
+    * Space: O(k) -> O(1)
     """
     if k == 3:
         largest_3 = heapq.nlargest(3, x)
