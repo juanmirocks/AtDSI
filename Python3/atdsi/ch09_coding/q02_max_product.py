@@ -230,8 +230,8 @@ def get_max_product_4(x: Iterable[SupportsRichComparison], k: NonNegativeInt) ->
             if is_k_big:
                 x_sorted = sorted(x, reverse=True)  # Space O(n)
                 largest_head = x_sorted
-                # Space O(k) -- It could be optimized to use `x_sorted` dropping unneeded elements in place
-                smallest_tail = x_sorted[-k:]  # Space O(k)
+                # Space O(k) - It could be optimized to use `x_sorted` dropping unneeded elements in place
+                smallest_tail = x_sorted[-k:]
 
             else:
                 # Space O(k) -- worst case: Space(n/2)
