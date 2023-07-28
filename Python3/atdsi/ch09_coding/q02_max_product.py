@@ -1,7 +1,7 @@
 from __future__ import annotations
 import heapq
 
-from typing import TYPE_CHECKING, Iterable, Sequence
+from typing import TYPE_CHECKING, Iterable, NewType, Sequence
 import math
 from atdsi import require
 
@@ -15,15 +15,19 @@ if TYPE_CHECKING:
 # Helper functions & constants
 
 
+NonNegativeInt = NewType("NonNegativeInt", int)
+""">=0 number -- Type property not enforced. We just use it for documentation purposes"""
+
+
 # See: https://docs.python.org/3.10/library/math.html?highlight=math%20prod#math.prod
 _PROD_START: SupportsRichComparison = 1
 
 
-def prod_first_k(x: list[SupportsRichComparison], k: int) -> SupportsRichComparison:
+def prod_first_k(x: Sequence[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
     """
-    Memory-efficiently multiply first `k` elements of `x` list.
+    Memory-efficiently multiply first `k` elements of `x` seq.
 
-    Alternative to: math.prod(x[:k]) to avoid creating a sub-list.
+    Alternative to: math.prod(x[:k]) to avoid creating a sub-seq.
 
     Note: (arbitrarily & for simplicity) just like math.prod by default, this function returns 1 if x is empty or k is 0
     """
@@ -43,7 +47,7 @@ def is_last_non_negative(x: Sequence[SupportsRichComparison]) -> bool:
 
 
 # Would be useful for generic solution with negative numbers and any k
-def how_many_last_k_nums_are_negative(x: list[SupportsRichComparison], k: int) -> int:
+def how_many_last_k_nums_are_negative(x: Sequence[SupportsRichComparison], k: NonNegativeInt) -> int:
     ret = 0
     for i in range(len(x) - 1, max(-1, len(x) - 1 - k), -1):
         if x[i] < 0:
@@ -54,7 +58,7 @@ def how_many_last_k_nums_are_negative(x: list[SupportsRichComparison], k: int) -
 
 
 def try_max_multiplying_head_with_last_2_negative_numbers(
-    x: list[SupportsRichComparison], k: int
+    x: list[SupportsRichComparison], k: NonNegativeInt
 ) -> SupportsRichComparison:
     if k != 3:
         raise NotImplementedError(
@@ -64,10 +68,20 @@ def try_max_multiplying_head_with_last_2_negative_numbers(
         return max(prod_first_k(x, k), x[0] * math.prod(x[len(x) - 2 :]))
 
 
+def get_equal_or_one_less_even_number(k: NonNegativeInt) -> int:
+    """
+    Return k if k is even, else k-1
+    """
+    if k % 2 == 0:
+        return k
+    else:
+        return k - 1
+
+
 # -----------------------------------------------------------------------------
 
 
-def get_max_product_1(x: Iterable[SupportsRichComparison], k: int) -> list[SupportsRichComparison]:
+def get_max_product_1(x: Iterable[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
     """
     Complexity:
     * Time: O(n * log(n))
@@ -85,7 +99,7 @@ def get_max_product_1(x: Iterable[SupportsRichComparison], k: int) -> list[Suppo
         return try_max_multiplying_head_with_last_2_negative_numbers(x_sorted, k)
 
 
-def get_max_product_2_mut(x: list[SupportsRichComparison], k: int) -> list[SupportsRichComparison]:
+def get_max_product_2_mut(x: list[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
     """
     Alternative: (IT MUTATES input x) sorting is done in place.
 
@@ -103,7 +117,7 @@ def get_max_product_2_mut(x: list[SupportsRichComparison], k: int) -> list[Suppo
         return try_max_multiplying_head_with_last_2_negative_numbers(x, k)
 
 
-def get_max_product_3(x: list[SupportsRichComparison], k: int) -> list[SupportsRichComparison]:
+def get_max_product_3(x: Sequence[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
     """
     Alternative: when k is known and small (3, as per question/problem exact definition) we can use a min/max-heap to more efficiently get the max & min elements.
     See: https://docs.python.org/3.10/library/heapq.html?highlight=heapq#heapq.nsmallest
@@ -120,6 +134,32 @@ def get_max_product_3(x: list[SupportsRichComparison], k: int) -> list[SupportsR
         return max(math.prod(largest_3), largest_3[0] * math.prod(smallest_2))
     else:
         return get_max_product_1(x, k)
+
+
+def get_max_product_4(x: Iterable[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
+    """
+    ?
+    """
+    match k:
+        case 0:
+            return _PROD_START
+        case 1:
+            try:
+                return max(x)
+            except ValueError:  # max() arg is an empty sequence
+                return _PROD_START
+        case _:
+            x_seq = (
+                x if isinstance(x, Sequence) else list(x)
+            )  # make sure we have an indexable sequence to work on it efficiently -- Space O(1) if input is already a sequence, else O(n)
+
+            if k * 2 > len(x_seq):
+                x_sorted = sorted(x)  # Space O(n)
+                largest_head = x_sorted
+                smallest_tail = x_sorted
+            else:
+                largest_head = heapq.nlargest(k, x_seq)
+                smallest_tail = heapq.nsmallest(get_equal_or_one_less_even_number(k), x_seq)
 
 
 # -----------------------------------------------------------------------------
