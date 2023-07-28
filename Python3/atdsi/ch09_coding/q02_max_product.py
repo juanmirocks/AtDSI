@@ -23,9 +23,9 @@ NonNegativeInt = NewType("NonNegativeInt", int)
 _PROD_START: SupportsRichComparison = 1
 
 
-def prod_first_k(x: Sequence[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
+def prod_first_k(x: Iterable[SupportsRichComparison], k: NonNegativeInt) -> SupportsRichComparison:
     """
-    Memory-efficiently multiply first `k` elements of `x` seq.
+    Memory-efficiently multiply first `k` elements of `x` iterable.
 
     Alternative to: math.prod(x[:k]) to avoid creating a sub-seq.
 
@@ -33,8 +33,14 @@ def prod_first_k(x: Sequence[SupportsRichComparison], k: NonNegativeInt) -> Supp
     """
     ret: SupportsRichComparison = _PROD_START
 
-    for i in range(min(k, len(x))):
-        ret *= x[i]
+    so_far = 0
+
+    for num in x:
+        if so_far == k:
+            return ret
+        else:
+            ret *= num
+            so_far += 1
 
     return ret
 
