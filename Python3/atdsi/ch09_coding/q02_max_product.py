@@ -79,6 +79,19 @@ def get_even_number_same_or_one_less(k: NonNegativeInt) -> int:
         return k - 1
 
 
+# Copied from: https://docs.python.org/3/library/itertools.html#itertools-recipes
+#
+# Replace by itertools.batched when Python 3.12 is released: https://docs.python.org/3.12/library/itertools.html#itertools.batched
+def batched(iterable, n):
+    "Batch data into tuples of length n. The last batch may be shorter."
+    # batched('ABCDEFG', 3) --> ABC DEF G
+    if n < 1:
+        raise ValueError("n must be at least one")
+    it = iter(iterable)
+    while batch := tuple(islice(it, n)):
+        yield batch
+
+
 # -----------------------------------------------------------------------------
 
 
@@ -94,19 +107,6 @@ def _try_max_multiplying_head_with_last_2_negative_numbers(
         )
     else:
         return max(prod_first_k(x, k), x[0] * math.prod(x[len(x) - 2 :]))
-
-
-# Copied from: https://docs.python.org/3/library/itertools.html#itertools-recipes
-#
-# Replace by itertools.batched when Python 3.12 is released: https://docs.python.org/3.12/library/itertools.html#itertools.batched
-def batched(iterable, n):
-    "Batch data into tuples of length n. The last batch may be shorter."
-    # batched('ABCDEFG', 3) --> ABC DEF G
-    if n < 1:
-        raise ValueError("n must be at least one")
-    it = iter(iterable)
-    while batch := tuple(islice(it, n)):
-        yield batch
 
 
 def _get_max_product_4__find_max_mult(
