@@ -1,0 +1,54 @@
+name: CI
+
+on: [push]
+
+permissions:
+  contents: read
+
+jobs:
+  test_n_lint:
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+        poetry-version: ["1.5"]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install poetry ${{ matrix.poetry-version }}
+        run: |
+          pipx install "poetry~=${{ matrix.poetry-version }}"
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "poetry" # cache dependencies
+
+      - name: Debug environment details
+        run: |
+          poetry debug info
+
+      - name: Install dependencies
+        run: |
+          poetry install --no-interaction --no-root
+          poetry show
+
+      - name: Test with pytest & pytest-cov
+        run: |
+          poetry run poe test
+
+      - name: Send coverage results to coveralls.io
+        if: github.repository == 'juanmirocks/AtDSI'
+        uses: coverallsapp/github-action@v2
+
+      - name: Lint with multiple tasks, including security checks (wo. snyk)
+        run: |
+          poetry run poe lint_all_wo_snyk
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/python-3.10@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
