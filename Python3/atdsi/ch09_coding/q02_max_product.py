@@ -1,7 +1,7 @@
 from __future__ import annotations
 import heapq
 
-from typing import TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING, Iterable, Sequence
 import math
 from atdsi import require
 
@@ -33,6 +33,13 @@ def prod_first_k(x: list[SupportsRichComparison], k: int) -> SupportsRichCompari
         ret *= x[i]
 
     return ret
+
+
+def is_last_non_negative(x: Sequence[SupportsRichComparison]) -> bool:
+    """
+    ASSUMPTION: the sequence is not empty.
+    """
+    return x[-1] >= 0
 
 
 # Would be useful for generic solution with negative numbers and any k
@@ -72,7 +79,7 @@ def get_max_product_1(x: Iterable[SupportsRichComparison], k: int) -> list[Suppo
         k == 0 or len(x_sorted) == 0
     ):  # check the length of x_sorted as input Iterable might not have an efficient `len` implementation
         return _PROD_START
-    elif x_sorted[-1] >= 0 or k == 1:
+    elif k == 1 or is_last_non_negative(x_sorted):
         return prod_first_k(x_sorted, k)
     else:
         return try_max_multiplying_head_with_last_2_negative_numbers(x_sorted, k)
@@ -90,7 +97,7 @@ def get_max_product_2_mut(x: list[SupportsRichComparison], k: int) -> list[Suppo
         return _PROD_START
 
     x.sort(reverse=True)
-    if x[-1] >= 0 or k == 1:
+    if k == 1 or is_last_non_negative(x):
         return prod_first_k(x, k)
     else:
         return try_max_multiplying_head_with_last_2_negative_numbers(x, k)
