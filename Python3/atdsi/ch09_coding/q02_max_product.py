@@ -227,7 +227,8 @@ def test_negative_numbers_only_for_fixed_k_3():
 
 TEST_CASES_NEGATIVE_GENERIC = [
     # Negative numbers, generic (when k != 3, not requested in question/problem)
-    (([-1, -8, -2, -2, 2], 4), 32)  # -8 * -2 * -2 * -1
+    (([-1, -8, -2, -2, 2], 4), 32),  # -8 * -2 * -2 * -1,
+    (([2, 2, -1, -1, -10, -10], 4), 400),  # -10 * -10 * 2 * 2
 ]
 
 
