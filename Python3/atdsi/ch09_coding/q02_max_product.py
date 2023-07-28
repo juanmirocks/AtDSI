@@ -197,7 +197,7 @@ def get_max_product_4(x: Iterable[SupportsRichComparison], k: NonNegativeInt) ->
                 # Space O(k) -- worst case: Space(n/2)
                 smallest_tail = heapq.nsmallest(get_even_number_same_or_one_less(k), x_seq)
 
-            smallest_tail_abs = list(map(abs, _leave_even_size_of_negative_numbers_only_mut(smallest_tail)))
+            smallest_tail_abs = _leave_even_size_of_negative_numbers_only_mut(smallest_tail)
 
             return max(
                 prod_first_k(largest_head, k),
