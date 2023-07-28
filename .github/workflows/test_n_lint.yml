@@ -53,7 +53,7 @@ jobs:
           poetry run poe lint_all_wo_snyk
 
       - name: Run Snyk to check for vulnerabilities -- testing ${{ inputs.working_directory }}
-        uses: snyk/actions/python-3.10@master
         working-directory: Python3
+        uses: snyk/actions/python-3.10@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
