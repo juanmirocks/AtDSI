@@ -1,7 +1,7 @@
 from __future__ import annotations
 import heapq
 
-from typing import TYPE_CHECKING, Iterable, NewType, Sequence
+from typing import TYPE_CHECKING, Iterable, Sequence, TypeAlias
 import math
 from itertools import islice
 
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 # Utility functions & constants
 
 
-NonNegativeInt = NewType("NonNegativeInt", int)
+NonNegativeInt: TypeAlias = int
 """>=0 number -- Type property not enforced. We just use it for documentation purposes"""
 
 
