@@ -17,6 +17,9 @@ def find_closest_points_1(
     return sorted(others, key=sort_key)[0:k]
 
 
+# -----------------------------------------------------------------------------
+
+
 def calc_dist_Euclidean(a: Coordinates, b: Coordinates) -> np.number:
     # See: https://stackoverflow.com/a/1401828/341320
     return np.linalg.norm(a - b)
