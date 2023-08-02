@@ -1,9 +1,11 @@
 from __future__ import annotations
 import heapq
 
-from typing import TYPE_CHECKING, Iterable, Sequence, TypeAlias
+from typing import TYPE_CHECKING, Iterable, Sequence
 import math
 from itertools import islice
+
+from atdsi.types import NonNegativeInt
 
 # See: https://mypy.readthedocs.io/en/stable/runtime_troubles.html#using-types-defined-in-stubs-but-not-at-runtime
 if TYPE_CHECKING:
@@ -19,10 +21,6 @@ if TYPE_CHECKING:
 # -----------------------------------------------------------------------------
 
 # Utility functions & constants
-
-
-NonNegativeInt: TypeAlias = int
-""">=0 number -- Type property not enforced. We just use it for documentation purposes"""
 
 
 # See: https://docs.python.org/3.10/library/math.html?highlight=math%20prod#math.prod
