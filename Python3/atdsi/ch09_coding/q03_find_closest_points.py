@@ -1,27 +1,28 @@
-import math
-from typing import Callable, TypeAlias
+from typing import Any, Callable, TypeAlias
+
 import numpy as np
 import numpy.typing as npt
-from numbers import Real
 
+from atdsi.types import NonNegativeInt
 
 Coordinates: TypeAlias = npt.NDArray
 
 
-def find_closest_points_1(reference: Coordinates, k: int, *others: Coordinates, **extra: str) -> list[Coordinates]:
-    dist_fun: Callable[[Coordinates, Coordinates], Real] = extra.get("dist_fun", calc_dist_Euclidean)
-    sort_key: Callable[[Coordinates], Real] = lambda other: dist_fun(reference, other)
+def find_closest_points_1(
+    reference: Coordinates, k: NonNegativeInt, *others: Coordinates, **extra: Any
+) -> list[Coordinates]:
+    dist_fun: Callable[[Coordinates, Coordinates], np.number] = extra.get("dist_fun", calc_dist_Euclidean)
+    sort_key: Callable[[Coordinates], np.number] = lambda other: dist_fun(reference, other)
 
-    return sorted(others, key=sort_key)[0: k]
+    return sorted(others, key=sort_key)[0:k]
 
 
-def calc_dist_Euclidean(a: Coordinates, b: Coordinates) -> Real:
+def calc_dist_Euclidean(a: Coordinates, b: Coordinates) -> np.number:
     # See: https://stackoverflow.com/a/1401828/341320
-    return np.linalg.norm(a-b)
+    return np.linalg.norm(a - b)
     # Alternatively:
     # assert(a.shape == b.shape and len(a.shape) == 1)
     # return math.sqrt(sum((a[i] - b[i])**2 for i in range(0, a.shape[0])))
-
 
 
 # -----------------------------------------------------------------------------
@@ -29,7 +30,7 @@ def calc_dist_Euclidean(a: Coordinates, b: Coordinates) -> Real:
 from atdsi.tutil import run_test_cases
 
 
-def a(*points: Real) -> Coordinates:
+def a(*points: int | float) -> Coordinates:
     """Sugar syntax for `np.array(...)`"""
     return np.array(list(points))
 
@@ -50,4 +51,4 @@ TEST_CASES = [
 
 
 def test():
-    run_test_cases(TEST_CASES, find_closest_points_1, equal = equal)
+    run_test_cases(TEST_CASES, find_closest_points_1, equal=equal)
