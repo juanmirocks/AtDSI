@@ -47,7 +47,7 @@ def find_closest_points_2(
 
 
     See heapq Python implementation details & complexity:
-    * https://github.com/python/cpython/blob/3.11/Lib/heapq.py#L397
+    * https://github.com/python/cpython/blob/v3.11.4/Lib/heapq.py#L397
     * https://stackoverflow.com/a/23038826/341320
     """
     dist_fun: Callable[[Coordinates, Coordinates], np.number] = extra.get("dist_fun", calc_dist_Euclidean)
