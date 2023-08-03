@@ -38,7 +38,8 @@ poethepoet = "^0.21.1"
 
 [tool.pytest.ini_options]
 testpaths = [
-  "atdsi/ch*/q*"
+  "atdsi/ch*/q*",
+  "tests/"
 ]
 
 
