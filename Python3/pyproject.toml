@@ -43,6 +43,7 @@ testpaths = [
 ]
 
 
+# Note: black is used by ufmt
 [tool.black]
 line-length = 120
 
