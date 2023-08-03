@@ -1,9 +1,9 @@
 from __future__ import annotations
-import heapq
 
-from typing import TYPE_CHECKING, Iterable, Sequence
+import heapq
 import math
 from itertools import islice
+from typing import TYPE_CHECKING, Iterable, Sequence
 
 from atdsi.types import NonNegativeInt
 
@@ -243,6 +243,7 @@ from atdsi.tutil import run_test_cases
 
 TEST_CASES_NON_GENERIC = [
     (([], 0), _PROD_START),
+    (([], 1), _PROD_START),
     (([3], 0), _PROD_START),
     (([0], 0), _PROD_START),
     (([0], 1), 0),
@@ -250,6 +251,7 @@ TEST_CASES_NON_GENERIC = [
     (([3, 2], 2), 6),
     (([3, 2, 5], 2), 15),
     (([1, 3, 4, 5], 3), 60),
+    (([-1, -8, -2, 2, 2], 1), 2),  # simple case of just taking the max
     # Negative numbers with fixed k==3
     (([-2, -4, 5, 3], 3), 40),  # as per question/problem definition
     (([-2, -4, -5, 3], 3), 60),
@@ -267,6 +269,8 @@ TEST_CASES_NEGATIVE_GENERIC = [
     # Negative numbers, generic (when k != 3, not requested in question/problem)
     (([-1, -8, -2, -2, 2], 4), 32),  # -8 * -2 * -2 * -1,
     (([2, 2, -1, -1, -10, -10], 4), 400),  # -10 * -10 * 2 * 2
+    # Further cases
+    (([-1, -8, -2, 2, 2], 2), 16),  # -8 * -2
 ]
 
 
