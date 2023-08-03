@@ -3,7 +3,7 @@ from __future__ import annotations
 import heapq
 import math
 from itertools import islice
-from typing import TYPE_CHECKING, Iterable, Sequence
+from typing import Iterable, Sequence, TYPE_CHECKING
 
 from atdsi.types import NonNegativeInt
 

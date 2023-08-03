@@ -1,4 +1,4 @@
-from typing import Callable, TypeVar, Sequence
+from typing import Callable, Sequence, TypeVar
 
 
 Output = TypeVar("Output")

@@ -1,6 +1,6 @@
+import heapq
 from typing import Any, Callable, TypeAlias
 
-import heapq
 import numpy as np
 import numpy.typing as npt
 
