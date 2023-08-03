@@ -63,7 +63,7 @@ def calc_dist_Euclidean(a: Coordinates, b: Coordinates) -> np.number:
     # See: https://stackoverflow.com/a/1401828/341320
     return np.linalg.norm(a - b)
     # Alternatively:
-    # assert(a.shape == b.shape and len(a.shape) == 1)
+    # require(a.shape == b.shape and len(a.shape) == 1)
     # return math.sqrt(sum((a[i] - b[i])**2 for i in range(0, a.shape[0])))
 
 
