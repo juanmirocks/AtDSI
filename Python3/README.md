@@ -23,6 +23,6 @@ poetry install
 poetry shell
 
 
-# Test (all questions & answers)
-pytest
+# Test (all questions & answers) with coverage
+poe test
 ```
