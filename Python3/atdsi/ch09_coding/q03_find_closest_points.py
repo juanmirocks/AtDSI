@@ -1,5 +1,6 @@
 from typing import Any, Callable, TypeAlias
 
+import heapq
 import numpy as np
 import numpy.typing as npt
 
@@ -11,10 +12,48 @@ Coordinates: TypeAlias = npt.NDArray
 def find_closest_points_1(
     reference: Coordinates, k: NonNegativeInt, *others: Coordinates, **extra: Any
 ) -> list[Coordinates]:
+    """
+    Use `sorted` and then take only the first k elements.
+
+
+    Complexity:
+    # m == len(others) and (assumed) k << m
+
+    * Time: O(m * log(m))
+    * Space: O(m)
+
+
+    See `sorted` ("Timsort") details:
+    * https://en.wikipedia.org/wiki/Timsort
+    """
     dist_fun: Callable[[Coordinates, Coordinates], np.number] = extra.get("dist_fun", calc_dist_Euclidean)
     sort_key: Callable[[Coordinates], np.number] = lambda other: dist_fun(reference, other)
 
-    return sorted(others, key=sort_key)[0:k]
+    return sorted(others, key=sort_key)[0:k]  # Time: O(m * log(m)) - Space: O(m)
+
+
+def find_closest_points_2(
+    reference: Coordinates, k: NonNegativeInt, *others: Coordinates, **extra: Any
+) -> list[Coordinates]:
+    """
+    Alternative: use min-heap to only store & sort on k elements.
+
+
+    Complexity:
+    # m == len(others) and (assumed) k << m
+
+    * Time: O(m * log(k))
+    * Space: O(k)
+
+
+    See heapq Python implementation details & complexity:
+    * https://github.com/python/cpython/blob/3.11/Lib/heapq.py#L397
+    * https://stackoverflow.com/a/23038826/341320
+    """
+    dist_fun: Callable[[Coordinates, Coordinates], np.number] = extra.get("dist_fun", calc_dist_Euclidean)
+    sort_key: Callable[[Coordinates], np.number] = lambda other: dist_fun(reference, other)
+
+    return heapq.nsmallest(k, others, key=sort_key)  # Time: O(m * log(k)) - Space: O(k)
 
 
 # -----------------------------------------------------------------------------
@@ -54,4 +93,4 @@ TEST_CASES = [
 
 
 def test():
-    run_test_cases(TEST_CASES, find_closest_points_1, equal=equal)
+    run_test_cases(TEST_CASES, find_closest_points_1, find_closest_points_2, equal=equal)
