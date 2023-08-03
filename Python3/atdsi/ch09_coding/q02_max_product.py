@@ -56,17 +56,6 @@ def is_last_non_negative(x: Sequence[SupportsRichComparison]) -> bool:
     return x[-1] >= 0
 
 
-# Would be useful for generic solution with negative numbers and any k
-def how_many_last_k_nums_are_negative(x: Sequence[SupportsRichComparison], k: NonNegativeInt) -> int:
-    ret = 0
-    for i in range(len(x) - 1, max(-1, len(x) - 1 - k), -1):
-        if x[i] < 0:
-            ret += 1
-        else:
-            return ret
-    return ret
-
-
 def get_even_number_same_or_one_less(k: NonNegativeInt) -> int:
     """
     Return k if k is even, else k-1
